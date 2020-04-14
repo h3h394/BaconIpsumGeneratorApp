@@ -16,7 +16,6 @@ function App() {
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setParagraphs(data);
       })
       .catch((err) => console.log(err));

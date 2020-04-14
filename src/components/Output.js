@@ -15,7 +15,7 @@ const Output = ({ paragraphs, includeHtml }) => (
 const styles = css`
   width: 100%;
   padding: 40px;
-  background: url('${BgImg}')no-repeat center/cover;
+  background: url('${BgImg}') no-repeat center/cover;
   border-radius: 4px;
   box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
   p {
