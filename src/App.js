@@ -7,19 +7,29 @@ import Output from "./components/Output";
 
 function App() {
   const [paragraphs, setParagraphs] = useState([]);
+  const [sentence, setSentence] = useState(2);
   const [inputValue, setInputValue] = useState(1);
   const [includeHtml, setIncludeHtml] = useState("Yes");
   const [copiedCode, setCopiedCode] = useState(false);
 
+  const validateSentence = sentence => {
+    if (sentence < 1 || sentence > 50) {
+      setSentence('1');
+      return 1;
+    } else {
+      return sentence;
+    }
+  }
+
   useEffect(() => {
-    const url = `https://baconipsum.com/api/?type=all-meat&paras=${inputValue}&start-with-lorem=1`;
+    const url = `https://baconipsum.com/api/?type=all-meat&sentences=${validateSentence(sentence)}&paras=${inputValue}&start-with-lorem=1`;
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
         setParagraphs(data);
       })
       .catch((err) => console.log(err));
-  }, [inputValue]);
+  }, [inputValue, sentence]);
 
   return (
     <div className="App">
@@ -32,6 +42,8 @@ function App() {
           setIncludeHtml={setIncludeHtml}
           includeHtml={includeHtml}
           setInputValue={setInputValue}
+          sentence={sentence}
+          setSentence={setSentence}
         />
         <Output paragraphs={paragraphs} includeHtml={includeHtml} />
       </Container>

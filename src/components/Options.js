@@ -9,6 +9,8 @@ const Options = ({
   copiedCode,
   setCopiedCode,
   paragraphs,
+  sentence,
+  setSentence,
 }) => {
   setTimeout(() => {
     setCopiedCode(false);
@@ -17,36 +19,48 @@ const Options = ({
   return (
     <div css={styles} className="options">
       <div className="wrapper">
-        <div className="paragraphs">
-          <p>Paragraphs:</p>
-          <input
-            type="number"
-            min="1"
-            max="10"
-            defaultValue="1"
-            onChange={(e) => setInputValue(e.target.value)}
-          />
+        <div className="optionsContainer">
+          <div className="paragraphs">
+            <p>Paragraphs:</p>
+            <input
+              type="number"
+              min="1"
+              max="10"
+              defaultValue="1"
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+          </div>
+          <div className="sentences">
+            <p>Sentences[1-50]:</p>
+            <input
+              type="number"
+              min="1"
+              max="50"
+              value={sentence}
+              onChange={(e) => setSentence(e.target.value)}
+            />
+          </div>
+          <div className="include">
+            <p>Include HTML:</p>
+            <select
+              defaultValue={includeHtml}
+              onChange={(e) => setIncludeHtml(e.target.value)}
+            >
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
         </div>
-        <div className="include">
-          <p>Include HTML:</p>
-          <select
-            defaultValue={includeHtml}
-            onChange={(e) => setIncludeHtml(e.target.value)}
+        <div className="copy">
+          <CopyToClipboard
+            text={paragraphs.map((p) =>
+              includeHtml === "Yes" ? "<p>" + paragraphs + "</p>" : paragraphs
+            )}
+            onCopy={() => setCopiedCode(true)}
           >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
+            <button>{copiedCode ? "Copied" : "Copy to clipboard"}</button>
+          </CopyToClipboard>
         </div>
-      </div>
-      <div className="copy">
-        <CopyToClipboard
-          text={paragraphs.map((p) =>
-            includeHtml === "Yes" ? "<p>" + paragraphs + "</p>" : paragraphs
-          )}
-          onCopy={() => setCopiedCode(true)}
-        >
-          <button>{copiedCode ? "Copied" : "Copy to clipboard"}</button>
-        </CopyToClipboard>
       </div>
     </div>
   );
@@ -55,36 +69,37 @@ const Options = ({
 const styles = css`
   width: 100%;
   padding: 20px 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
   margin: 20px 0;
   .wrapper {
     display: flex;
-    p {
-      margin-bottom: 10px;
-      color: #fff;
-      font-weight: 400;
-      font-size: 17px;
-      letter-spacing: 1.2px;
-    }
-    input,
-    select {
-      background: #04091d;
-      font-size: 15px;
-      font-weight: 700;
-      color: #fff;
-      border: none;
-      outline: none;
-      padding: 10px 20px;
-      width: 160px;
-    }
-    select {
-      appearance: none;
-    }
-    .paragraphs {
-      input {
-        margin-right: 30px;
+    align-items: flex-end;
+    justify-content: space-between;
+    .optionsContainer {
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      p {
+        margin-bottom: 10px;
+        color: #fff;
+        font-weight: 400;
+        font-size: 17px;
+        letter-spacing: 1.2px;
+      }
+      input,
+      select {
+        background: #04091d;
+        font-size: 15px;
+        font-weight: 700;
+        color: #fff;
+        border: none;
+        outline: none;
+        padding: 10px 20px;
+        width: 180px;
+      }
+      select {
+        appearance: none;
       }
     }
   }
@@ -107,27 +122,55 @@ const styles = css`
     }
   }
   @media (max-width: 640px) {
-    flex-direction: column;
-    align-items: center;
     .wrapper {
       width: 100%;
-      justify-content: space-between;
-      .paragraphs,
-      .include {
-        width: 100%;
-        max-width: 47%;
+      flex-direction: column;
+      align-items: center;
+      .optionsContainer {
+        flex-direction: column;
+        align-items: center;
+        .paragraphs,
+        .include,
+        .sentences {
+          width: 100%;
+          margin: 10px 0;
+          p {
+            font-size: 10px;
+          }
+        }
+        input,
+        select {
+          width: 100%;
+        }
       }
-      input,
-      select {
+      .copy {
         width: 100%;
+        button {
+          margin: 10px 0;
+          width: 100%;
+          padding: 24px 0;
+        }
       }
     }
-    .copy {
-      width: 100%;
-      button {
-        margin: 20px 0 0 0;
+  }
+  @media (min-width: 641px) and (max-width: 940px) {
+    .wrapper {
+      flex-direction: column;
+      .optionsContainer {
+        max-width: 100%;
+        justify-content: space-between;
+        .paragraphs,
+        .include,
+        .sentences {
+          width: 100%;
+          max-width: 30%;
+        }
+      }
+      .copy {
         width: 100%;
-        padding: 24px 0;
+        button {
+          margin: 10px 0;
+        }
       }
     }
   }
