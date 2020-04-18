@@ -9,8 +9,8 @@ const Options = ({
   copiedCode,
   setCopiedCode,
   paragraphs,
-  sentence,
-  setSentence,
+  tag,
+  setTag,
 }) => {
   setTimeout(() => {
     setCopiedCode(false);
@@ -30,15 +30,18 @@ const Options = ({
               onChange={(e) => setInputValue(e.target.value)}
             />
           </div>
-          <div className="sentences">
-            <p>Sentences[1-50]:</p>
-            <input
-              type="number"
-              min="1"
-              max="50"
-              value={sentence}
-              onChange={(e) => setSentence(e.target.value)}
-            />
+          <div className="tags">
+            <p>Tag:</p>
+            <select defaultValue={tag} onChange={(e) => setTag(e.target.value)}>
+              <option value="p">&lt;p&gt;</option>
+              <option value="h1">&lt;h1&gt;</option>
+              <option value="h2">&lt;h2&gt;</option>
+              <option value="h3">&lt;h3&gt;</option>
+              <option value="h4">&lt;h4&gt;</option>
+              <option value="h5">&lt;h5&gt;</option>
+              <option value="h6">&lt;h6&gt;</option>
+              <option value="span">&lt;span&gt;</option>
+            </select>
           </div>
           <div className="include">
             <p>Include HTML:</p>
@@ -54,7 +57,9 @@ const Options = ({
         <div className="copy">
           <CopyToClipboard
             text={paragraphs.map((p) =>
-              includeHtml === "Yes" ? "<p>" + paragraphs + "</p>" : paragraphs
+              includeHtml === "Yes"
+                ? `<${tag}>` + paragraphs + `</${tag}>`
+                : paragraphs
             )}
             onCopy={() => setCopiedCode(true)}
           >
@@ -131,7 +136,7 @@ const styles = css`
         align-items: center;
         .paragraphs,
         .include,
-        .sentences {
+        .tags {
           width: 100%;
           margin: 10px 0;
           p {
@@ -161,7 +166,7 @@ const styles = css`
         justify-content: space-between;
         .paragraphs,
         .include,
-        .sentences {
+        .tags {
           width: 100%;
           max-width: 30%;
         }
